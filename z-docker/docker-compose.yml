@@ -1,0 +1,35 @@
+# docker-compose.yml
+version: '3'
+services:
+    flask:
+        image: webapp-flask
+        build:
+            context: ./Flask
+        volumes:
+            - "../:/app"
+        networks:    
+            - backend
+        environment:
+            - ROOT_PASSWORD=${ROOT_PASSWORD}
+        ports:
+            - "13001:22"
+    nginx:
+        image: webapp-nginx
+        build:
+            context: ./Nginx
+        ports:
+            - 5000:80
+        depends_on:
+            - flask
+        networks:
+            - frontend    
+            - backend        
+
+volumes:
+  databases:
+
+networks:
+  frontend:
+    driver: "bridge"
+  backend:
+    driver: "bridge"
